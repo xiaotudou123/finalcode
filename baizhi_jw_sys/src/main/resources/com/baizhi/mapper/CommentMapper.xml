@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.CommentMapper" >
+
+
+  <resultMap id="BaseResultMap" type="com.baizhi.entity.Comment" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="DOUBLE" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    id, score, content, createtime
+  </sql>
+
+  <!--根据订单id查看评价-->
+  <select id="selectByOrderid" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from jw_comment
+    where orderid=#{orderid}
+  </select>
+
+  <resultMap id="commentMap" type="com.baizhi.VO.LawerComment">
+    <id column="cid" property="cid"/>
+    <result column="content" property="content"/>
+    <result column="createtime" property="createtime"/>
+    <result column="score" property="score"/>
+    <result column="name" property="uname"/>
+
+  </resultMap>
+
+  <!--根据律师id查看所有评价-->
+  <select id="selectByLawerId" parameterType="java.lang.String" resultMap="commentMap">
+    select u.name,c.id cid,c.content,c.createtime,c.score
+    from jw_order o
+    join jw_comment c
+    on o.id = c.orderid
+    join jw_user u
+    on o.userid = u.id
+    where o.lawerid=#{lawerid}
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jw_comment
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jw_comment
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+
+  <insert id="insert" parameterType="com.baizhi.entity.Comment" >
+    insert into jw_comment (id, score, content, 
+      createtime)
+    values (#{id,jdbcType=VARCHAR}, #{score,jdbcType=DOUBLE}, #{content,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+
+
+  <update id="updateByPrimaryKey" parameterType="com.baizhi.entity.Comment" >
+    update jw_comment
+    set score = #{score,jdbcType=DOUBLE},
+      content = #{content,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.MenuMapper" >
+
+
+  <resultMap id="BaseResultMap" type="com.baizhi.entity.Menu" >
+    <id column="id1" property="id" jdbcType="VARCHAR" />
+    <result column="name1" property="name" jdbcType="VARCHAR" />
+    <result column="href1" property="href" jdbcType="VARCHAR" />
+    <result column="icon1" property="icon" jdbcType="VARCHAR" />
+    <collection property="menus" javaType="list" ofType="com.baizhi.entity.Menu">
+      <id column="id2" property="id" jdbcType="VARCHAR" />
+      <result column="name2" property="name" jdbcType="VARCHAR" />
+      <result column="href2" property="href" jdbcType="VARCHAR" />
+      <result column="icon2" property="icon" jdbcType="VARCHAR" />
+    </collection>
+
+
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+      select m1.id id1,m1.name name1,m1.href href1,m1.icon icon1,m2.id id2,m2.name name2,m2.href href2,m2.icon icon2
+      from jw_menu m1
+      left join jw_menu m2
+      on m1.id=m2.parentid
+      where m1.parentid is null
+  </sql>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    <include refid="Base_Column_List"/>
+  </select>
+
+
+  <select id="queryOne" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    <include refid="Base_Column_List" />
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from jw_menu
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+
+  <insert id="save" parameterType="com.baizhi.entity.Menu" >
+    insert into jw_menu (id, name, parentid, 
+      href, icon)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{parentid,jdbcType=VARCHAR}, 
+      #{href,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="update" parameterType="com.baizhi.entity.Menu" >
+    update jw_menu
+    set name = #{name,jdbcType=VARCHAR},
+      parentid = #{parentid,jdbcType=VARCHAR},
+      href = #{href,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+</mapper>

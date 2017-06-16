@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.RedpackageMapper" >
+  <resultMap id="BaseResultMap" type="com.baizhi.entity.Redpackage" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="redpackage" property="redpackage" jdbcType="DECIMAL" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    id, redpackage, content
+  </sql>
+
+
+  <resultMap id="redMap" type="com.baizhi.VO.RedPackage">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="redpackage" property="redpackage" jdbcType="DECIMAL" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="name" property="uname"/>
+  </resultMap>
+
+  <select id="selectAllByLawerid" parameterType="java.lang.String" resultMap="redMap">
+    select r.id,r.redpackage,r.content,u.name
+    from jw_redpackage r
+    join jw_user u
+    on r.userid = u.id
+    where r.lawerid=#{lawerid}
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jw_redpackage
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jw_redpackage
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+
+  <insert id="insert" parameterType="com.baizhi.entity.Redpackage" >
+    insert into jw_redpackage (id, redpackage, content
+      )
+    values (#{id,jdbcType=VARCHAR}, #{redpackage,jdbcType=DECIMAL}, #{content,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.baizhi.entity.Redpackage" >
+    update jw_redpackage
+    set redpackage = #{redpackage,jdbcType=DECIMAL},
+      content = #{content,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

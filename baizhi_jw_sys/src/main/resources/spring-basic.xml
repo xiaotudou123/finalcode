@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <!-- 开启注解扫描 -->
+    <context:component-scan base-package="com">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+
+    <!-- 引入配置文件 -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:com/baizhi/conf/db.properties"/>
+    </bean>
+
+    <!-- 创建数据源对象 -->
+    <bean id="datasource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${mysql.driver}"/>
+        <property name="url" value="${mysql.url}"/>
+        <property name="username" value="${mysql.username}"/>
+        <property name="password" value="${mysql.password}"/>
+    </bean>
+
+    <!-- 创建sqlSesionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="datasource"/>
+
+        <property name="plugins">
+            <array>
+                <bean  class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>
+                            helperDialect=mysql
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+
+        <property name="mapperLocations" value="classpath:com/baizhi/mapper/*.xml"/>
+    </bean>
+
+    <!-- 创建dao对象 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.baizhi.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+
+    <!-- 配置事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="datasource"/>
+     </bean>
+
+    <!-- 配置注解式事务生效 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean id="jedis" class="redis.clients.jedis.Jedis">
+        <constructor-arg index="0" name="host" type="java.lang.String" value="192.168.154.128"/>
+        <constructor-arg index="1" name="port" type="int" value="6379"/>
+    </bean>
+
+    <!--通知类-->
+    <bean id="redisCache" class="com.baizhi.advice.RedisAdvice"/>
+
+    <!--配置切面-->
+    <aop:config>
+        <aop:pointcut id="pc" expression="execution(* com.baizhi.service.* .*(..))"/>
+        <aop:advisor advice-ref="redisCache" pointcut-ref="pc"/>
+    </aop:config>
+
+</beans>

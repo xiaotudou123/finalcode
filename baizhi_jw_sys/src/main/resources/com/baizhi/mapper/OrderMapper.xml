@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.OrderMapper" >
+  <resultMap id="BaseResultMap" type="com.baizhi.entity.Order" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+
+  <resultMap id="orderMap" type="com.baizhi.VO.MyOrder">
+    <id column="id" property="id"/>
+    <result column="uname" property="uname"/>
+    <result column="lname" property="lname"/>
+    <result column="type" property="type"/>
+    <result column="content" property="content"/>
+    <result column="status" property="status"/>
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, content, type, status
+  </sql>
+
+  <select id="selectAll" resultMap="orderMap">
+    select o.id,u.name uname,l.name lname,o.type,o.content,o.status
+    from jw_order o
+    join jw_user u
+    on o.userid = u.id
+    join jw_lawer l
+    on o.lawerid=l.id
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jw_order
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jw_order
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+
+  <insert id="insert" parameterType="com.baizhi.entity.Order" >
+    insert into jw_order (id, content, type, 
+      status)
+    values (#{id,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER})
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.baizhi.entity.Order" >
+    update jw_order
+    set content = #{content,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

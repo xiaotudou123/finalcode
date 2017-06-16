@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.LawerMapper" >
+
+  <resultMap id="lawerMap" type="com.baizhi.entity.Lawer">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
+    <result column="workspace" property="workspace" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="wordprice" property="wordprice" jdbcType="DECIMAL" />
+    <result column="phoneprice" property="phoneprice" jdbcType="DECIMAL" />
+    <result column="photo" property="photo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    select id,name,address, year, number, workspace, description, wordprice, phoneprice, photo,
+    status
+    from jw_lawer
+  </sql>
+
+
+
+
+  <select id="selectAll" resultMap="lawerMap">
+    <include refid="Base_Column_List" />
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="lawerMap" parameterType="java.lang.String" >
+    <include refid="Base_Column_List" />
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jw_lawer
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.baizhi.entity.Lawer" >
+    insert into jw_lawer (id, name, address, 
+      year, number, workspace, 
+      description, wordprice, phoneprice, 
+      photo, status)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{year,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, #{workspace,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{wordprice,jdbcType=DECIMAL}, #{phoneprice,jdbcType=DECIMAL}, 
+      #{photo,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="add">
+    INSERT into jw_type_lawer(lawerid,lawertypeid)
+    values(#{lawerid},#{lawertypeid})
+
+  </insert>
+
+
+  <update id="updateByPrimaryKey" parameterType="com.baizhi.entity.Lawer" >
+    update jw_lawer
+    set name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      year = #{year,jdbcType=VARCHAR},
+      number = #{number,jdbcType=VARCHAR},
+      workspace = #{workspace,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      wordprice = #{wordprice,jdbcType=DECIMAL},
+      phoneprice = #{phoneprice,jdbcType=DECIMAL},
+      photo = #{photo,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
