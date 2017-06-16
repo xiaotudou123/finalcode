@@ -74,7 +74,7 @@
 
     <!--配置切面-->
     <aop:config>
-        <aop:pointcut id="pc" expression="execution(* com.baizhi.service.* .*(..))"/>
+        <aop:pointcut id="pc" expression="execution(* com.baizhi.service.LawerService* .*(..))"/>
         <aop:advisor advice-ref="redisCache" pointcut-ref="pc"/>
     </aop:config>
 

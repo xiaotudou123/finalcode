@@ -49,6 +49,7 @@ public class DealtypeServiceImpl implements DealtypeService {
             dealtype.setParentid(null);
             dealtype.setFlag("1");
         }
+        System.out.println("dealtypeService"+dealtype);
         dealtypeMapper.insert(dealtype);
     }
 
@@ -62,5 +63,15 @@ public class DealtypeServiceImpl implements DealtypeService {
     public List<Dealtype> queryAllTwo() {
         List<Dealtype> dealtypes = dealtypeMapper.selectAllTwo();
         return dealtypes;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS,readOnly = true)
+    public Dealtype queryOne(String id){
+        Dealtype dealtype = dealtypeMapper.selectByPrimaryKey(id);
+        return dealtype;
+    }
+
+    public void update(Dealtype dealtype){
+        dealtypeMapper.updateByPrimaryKey(dealtype);
     }
 }

@@ -71,9 +71,9 @@
         $da.dialog({
             width:600,
             height:300,
-            title:"律师分类的详细信息",
+            title:"案例分类的详细信息",
             iconCls:"icon-man",
-            href:"${pageContext.request.contextPath}/back/lawer/type/editLawertype.jsp?id="+id,
+            href:"${pageContext.request.contextPath}/back/deal/type/editDealType.jsp?id="+id,
             buttons:[{
                 text:'保存',
                 iconCls:'icon-save',
@@ -110,7 +110,7 @@
     //保存用户saveDeal
     function saveDealtype(){
         $("#dealtypeForm").form('submit',{
-            url:'/baizhi_jw_sys/deal/add',
+            url:'/baizhi_jw_sys/dealtype/add',
             success:function(){
                 $da.dialog('close',true);
                 $dg.datagrid('reload');
@@ -120,8 +120,8 @@
 
     //修改用户
     function upLt(){
-        $("#inputForm").form('submit',{
-            url:'/baizhi_jw_sys/lawertype/update',
+        $("#dtype").form('submit',{
+            url:'/baizhi_jw_sys/dealtype/update',
             success:function(){
                 $da.dialog('close',true);
                 $dg.datagrid('reload');

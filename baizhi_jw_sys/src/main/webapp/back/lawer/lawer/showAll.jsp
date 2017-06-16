@@ -49,14 +49,14 @@
             pageNumber:1,
             pageSize:2,
             pageList:[2,4,6,8,10],
-            toolbar:'#lb',
+            toolbar:'#lawer',
 
 
         });
     });
 
     //添加的操作
-    function addStu() {
+    function addLawer() {
         $da.dialog({
             width:600,
             height:300,
@@ -228,8 +228,8 @@
 
 
 
-        <div id="lb">
-            <a href="javascript:;" onClick="addStu()" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
+        <div id="lawer">
+            <a href="javascript:;" onClick="addLawer()" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
         </div>
 
     </div>

@@ -24,4 +24,10 @@ public interface DealtypeService {
     //查看所有二级类别
     public List<Dealtype> queryAllTwo();
 
+    //根据id查一个类别的详细
+    public Dealtype queryOne(String id);
+
+    //修改一个类别的名称
+    public void update(Dealtype dealtype);
+
 }

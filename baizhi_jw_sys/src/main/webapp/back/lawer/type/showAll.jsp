@@ -43,7 +43,7 @@
     });
 
     //添加的操作
-    function addStu() {
+    function addLawertype() {
         $da.dialog({
             width:600,
             height:300,
@@ -53,7 +53,7 @@
             buttons:[{
                 text:'保存',
                 iconCls:'icon-save',
-                handler:saveLt,
+                handler:saveltype,
             },{
                 text:'关闭',
                 iconCls:'icon-cancel',
@@ -101,8 +101,8 @@
 
 
     //保存用户
-    function saveLt(){
-        $("#lawerTypeForm").form('submit',{
+    function saveltype(){
+        $("#ltypeForm").form('submit',{
             url:'/baizhi_jw_sys/lawertype/add',
             success:function(){
                 $da.dialog('close',true);
@@ -157,7 +157,7 @@
         <div id="lawertypeDa"></div>
 
         <div id="lawertype">
-            <a href="javascript:;" onClick="addStu()" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
+            <a href="javascript:;" onClick="addLawertype()" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
         </div>
 
     </div>

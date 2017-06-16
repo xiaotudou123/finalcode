@@ -1,6 +1,7 @@
 package com.baizhi.controller;
 
 import com.baizhi.VO.My;
+import com.baizhi.entity.Deal;
 import com.baizhi.entity.Dealtype;
 import com.baizhi.service.DealtypeService;
 import org.springframework.stereotype.Controller;
@@ -56,4 +57,18 @@ public class DealtypeController {
         return dealtypes;
     }
 
+
+    //根据id查一个类别的详细
+    @RequestMapping("/showOneById")
+    @ResponseBody
+    public Dealtype showOneById(String id){
+        Dealtype dealtype = dealtypeService.queryOne(id);
+        return dealtype;
+    }
+
+    //根据id修改一个
+    @RequestMapping("/update")
+    public void update(Dealtype dealtype){
+        dealtypeService.update(dealtype);
+    }
 }
