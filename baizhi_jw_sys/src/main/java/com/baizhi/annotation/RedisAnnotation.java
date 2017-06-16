@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 /**
  * Created by SY on 2017/6/14.
  */
+
+//自定义注解
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RedisAnnotation {
