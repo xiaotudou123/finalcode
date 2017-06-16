@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://cxf.apache.org/jaxrs
+	   http://cxf.apache.org/schemas/jaxrs.xsd
+	   http://www.springframework.org/schema/context
+	   http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!-- 开启注解扫描 -->
+    <context:component-scan base-package="com"/>
+
+    <!-- 引入配置文件 -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:com/baizhi/conf/db.properties"/>
+    </bean>
+
+    <!-- 创建数据源对象 -->
+    <bean id="datasource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${mysql.driver}"/>
+        <property name="url" value="${mysql.url}"/>
+        <property name="username" value="${mysql.username}"/>
+        <property name="password" value="${mysql.password}"/>
+    </bean>
+
+    <!-- 创建sqlSesionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="datasource"/>
+        <property name="mapperLocations" value="classpath:com/baizhi/mapper/*.xml"/>
+    </bean>
+
+    <!-- 创建dao对象 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.baizhi.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+
+    <bean id="jedis" class="redis.clients.jedis.Jedis">
+        <constructor-arg index="0" name="host" type="java.lang.String" value="192.168.154.128"/>
+        <constructor-arg index="1" name="port" type="int" value="6379"/>
+    </bean>
+
+
+    <bean id="jwWebService" class="com.baizhi.web.JwWebServiceImpl"/>
+
+    <jaxrs:server address="/jw" serviceClass="com.baizhi.web.JwWebService">
+      <jaxrs:serviceBeans>
+          <ref bean="jwWebService"/>
+      </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="fastJsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+
+
+
+    <bean id="fastJsonProvider" class="com.alibaba.fastjson.support.jaxrs.FastJsonProvider"/>
+</beans>

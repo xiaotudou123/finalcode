@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.LawerMapper" >
+
+  <resultMap id="lawerMap" type="com.baizhi.entity.Lawer">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
+    <result column="workspace" property="workspace" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="wordprice" property="wordprice" jdbcType="DECIMAL" />
+    <result column="phoneprice" property="phoneprice" jdbcType="DECIMAL" />
+    <result column="photo" property="photo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <collection property="redpackages" javaType="list" ofType="com.baizhi.entity.Redpackage" select="com.baizhi.dao.RedpackageMapper.selectAllByLawerid" column="id"></collection>
+
+    <collection property="lawertypes" javaType="list" ofType="com.baizhi.entity.Lawertype"
+                select="com.baizhi.dao.LawertypeMapper.selectByLawerId" column="id"></collection>
+    <collection property="comments" javaType="list" ofType="com.baizhi.entity.Comment"
+                select="com.baizhi.dao.CommentMapper.selectByLawerId" column="id"></collection>
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    select id,name,address, year, number, workspace, description, wordprice, phoneprice, photo,
+    status
+    from jw_lawer
+  </sql>
+
+  <resultMap id="lawersMap" type="com.baizhi.entity.Lawer">
+      <id column="id" property="id" jdbcType="VARCHAR" />
+      <result column="name" property="name" jdbcType="VARCHAR" />
+      <result column="address" property="address" jdbcType="VARCHAR" />
+      <result column="year" property="year" jdbcType="VARCHAR" />
+      <result column="number" property="number" jdbcType="VARCHAR" />
+      <result column="workspace" property="workspace" jdbcType="VARCHAR" />
+      <result column="description" property="description" jdbcType="VARCHAR" />
+      <result column="wordprice" property="wordprice" jdbcType="DECIMAL" />
+      <result column="phoneprice" property="phoneprice" jdbcType="DECIMAL" />
+      <result column="photo" property="photo" jdbcType="VARCHAR" />
+      <result column="status" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="selectAll" resultMap="lawersMap">
+    <include refid="Base_Column_List" />
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="lawerMap" parameterType="java.lang.String" >
+    <include refid="Base_Column_List" />
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

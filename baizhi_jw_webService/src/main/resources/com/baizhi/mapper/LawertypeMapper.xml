@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.LawertypeMapper" >
+
+  <resultMap id="BaseResultMap" type="com.baizhi.entity.Lawertype" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    id, name
+  </sql>
+
+  <sql id="byid">
+     select l.id,name
+    from jw_lawertype l
+    join jw_type_lawer tl
+    on l.id=tl.lawertypeid
+    where tl.lawerid=#{lawerid}
+  </sql>
+  <select id="selectByLawerId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <include refid="byid"/>
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from jw_lawertype
+  </select>
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jw_lawertype
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+
+  <resultMap id="lawersMap" type="com.baizhi.entity.Lawertype">
+    <id column="lawertypeid" property="id"/>
+    <result column="tname" property="name"/>
+    <collection property="lawers" javaType="list" ofType="com.baizhi.entity.Lawer">
+      <id column="lawerid" property="id" jdbcType="VARCHAR" />
+      <result column="lname" property="name" jdbcType="VARCHAR" />
+      <result column="address" property="address" jdbcType="VARCHAR" />
+      <result column="year" property="year" jdbcType="VARCHAR" />
+      <result column="number" property="number" jdbcType="VARCHAR" />
+      <result column="workspace" property="workspace" jdbcType="VARCHAR" />
+      <result column="description" property="description" jdbcType="VARCHAR" />
+      <result column="wordprice" property="wordprice" jdbcType="DECIMAL" />
+      <result column="phoneprice" property="phoneprice" jdbcType="DECIMAL" />
+      <result column="photo" property="photo" jdbcType="VARCHAR" />
+      <result column="status" property="status" jdbcType="VARCHAR" />
+    </collection>
+
+  </resultMap>
+
+  <select id="selectByLawertypeid" parameterType="java.lang.String" resultMap="lawersMap">
+    select tl.lawerid,tl.lawertypeid,t.name tname,l.name lname,address, year, number, workspace, description, wordprice, phoneprice, photo,
+    status
+    from jw_type_lawer tl
+    left join jw_lawertype t
+    on t.id = tl.lawertypeid
+    left join  jw_lawer l
+    on tl.lawerid = l.id
+    where tl.lawertypeid=#{lawertypeid}
+  </select>
+
+
+</mapper>

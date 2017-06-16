@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.DealtypeMapper" >
+
+
+  <resultMap id="BaseResultMap" type="com.baizhi.entity.Dealtype" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+
+
+  <sql id="Base_Column_List" >
+    id, name, flag
+  </sql>
+
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from jw_dealtype
+    where parentid is null
+  </select>
+
+  <resultMap id="DealsMap" type="com.baizhi.entity.Dealtype" >
+    <id column="id1" property="id" jdbcType="VARCHAR" />
+    <result column="name1" property="name" jdbcType="VARCHAR" />
+    <collection property="dealtypes" javaType="list" ofType="com.baizhi.entity.Dealtype">
+      <id column="id2" property="id" jdbcType="VARCHAR" />
+      <result column="name2" property="name" jdbcType="VARCHAR" />
+      <collection property="deals" javaType="list" ofType="com.baizhi.entity.Deal">
+        <id column="id3" property="id"/>
+        <result column="title" property="title"/>
+        <result column="createtime" property="createtime"/>
+        <result column="content" property="content"/>
+        <result column="fnme" property="fname"/>
+        <result column="tname" property="tname"/>
+      </collection>
+    </collection>
+  </resultMap>
+
+
+  <select id="selectByOneId" resultMap="DealsMap" parameterType="java.lang.String" >
+    select d1.id id1,d1.name name1,d1.parentid,d2.id id2,d2.name name2,d.content,d.createtime,d.id id3,d.title
+    from jw_dealtype d1
+    left join jw_dealtype d2
+    on d1.id = d2.parentid
+    left join jw_deal d
+    on d.dealtypeid = d2.id
+    where d1.parentid is null and d1.id=#{id}
+  </select>
+
+
+  <resultMap id="twoDealMap" type="com.baizhi.entity.Dealtype" >
+    <id column="id1" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <collection property="deals" javaType="list" ofType="com.baizhi.entity.Deal">
+      <id column="id2" property="id"/>
+      <result column="title" property="title"/>
+      <result column="createtime" property="createtime"/>
+      <result column="content" property="content"/>
+      <result column="fnme" property="fname"/>
+      <result column="tname" property="tname"/>
+    </collection>
+  </resultMap>
+
+  <select id="selectByTwoId" resultMap="twoDealMap" parameterType="java.lang.String" >
+    select d1.id id1,d1.name,d.content,d.createtime,d.id id2,d.title
+    from jw_dealtype d1
+    left join jw_deal d
+    on d.dealtypeid = d1.id
+    where d.dealtypeid=#{id}
+  </select>
+
+
+
+
+
+</mapper>

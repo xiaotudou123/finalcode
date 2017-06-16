@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.baizhi.entity.User" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="DOUBLE" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List" >
+    id, name, phone, money
+  </sql>
+
+
+
+  <select id="selectAllFavo" parameterType="java.lang.String" resultType="com.baizhi.entity.Lawer">
+     select l.id,l.name,l.address,l.description
+    from jw_favorite f
+    join jw_lawer l
+    on f.lawerid = l.id
+    where f.userid=#{userid}
+  </select>
+
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from jw_user
+  </select>
+
+  <select id="selectByPhone" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jw_user
+    where phone = #{phone,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from jw_user
+    where phone = #{phone,jdbcType=VARCHAR}
+  </select>
+
+
+
+  <insert id="insert" parameterType="com.baizhi.entity.User" >
+    insert into jw_user (id, name, phone, 
+      money)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{money,jdbcType=DOUBLE})
+  </insert>
+
+  <!--添加收藏-->
+  <insert id="addFavo">
+    insert into jw_favorite(userid,lawerid)
+    values(#{userid},#{lawerid})
+  </insert>
+
+
+
+  <update id="updateByPrimaryKey" parameterType="com.baizhi.entity.User" >
+    update jw_user
+    set name = #{name,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
